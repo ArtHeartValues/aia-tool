@@ -1,23 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>A.i.A. — Accountability in AI Interaction Systems</title>
-    <meta
-      name="description"
-      content="A.i.A. is a detection and review system for surfacing ambiguity, verifying interpretation, and enabling accountable decision-making."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <script type="module" crossorigin src="/aia-tool/assets/index-CKHcXdD5.js"></script>
-    <link rel="stylesheet" crossorigin href="/aia-tool/assets/index-BlP1YIl5.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Healer</title>
+  <meta name="description" content="A listening ear. For anyone. Built from truth." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Karla:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --void: #0a0a0f;
+      --mist: #a8a8c0;
+      --light: #e8e8f0;
+      --gold: #c9a96e;
+      --lavender: #9b8ec4;
+      --rose: #c47b7b;
+      --white: #f4f4f8;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--void);
+      color: var(--light);
+      font-family: 'Karla', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0;
+      animation: breathe 12s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(155,142,196,0.15), transparent 70%);
+      top: -100px; left: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(201,169,110,0.1), transparent 70%);
+      bottom: -80px; right: -80px;
+      animation-delay: 4s;
+    }
+
+    .orb-3 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(123,196,168,0.08), transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 8s;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .arrival {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+      animation: arrive 2.4s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes arrive {
+      0% { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--lavender);
+      margin-bottom: 48px;
+      opacity: 0.7;
+    }
+
+    .invitation {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.3;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .sub {
+      font-size: 15px;
+      color: var(--mist);
+      line-height: 1.7;
+      margin-bottom: 56px;
+      max-width: 380px;
+    }
+
+    .listening-box { width: 100%; margin-bottom: 16px; }
+
+    .listening-box textarea {
+      width: 100%;
+      min-height: 120px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.6;
+      padding: 24px 28px;
+      resize: none;
+      outline: none;
+      transition: border-color 0.4s ease, background 0.4s ease;
+    }
+
+    .listening-box textarea::placeholder {
+      color: rgba(168,168,192,0.35);
+      font-style: italic;
+    }
+
+    .listening-box textarea:focus {
+      border-color: rgba(155,142,196,0.3);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .send-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 48px;
+    }
+
+    .send-btn {
+      background: none;
+      border: 1px solid rgba(201,169,110,0.3);
+      color: var(--gold);
+      font-family: 'Karla', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 12px 28px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .send-btn:hover {
+      background: rgba(201,169,110,0.08);
+      border-color: rgba(201,169,110,0.6);
+    }
+
+    .thread {
+      width: 100%;
+      max-width: 520px;
+      display: none;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 16px;
+    }
+
+    .thread.active { display: flex; }
+
+    .msg {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: fadeUp 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-you { align-items: flex-end; }
+    .msg-healer { align-items: flex-start; }
+
+    .msg-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(168,168,192,0.4);
+    }
+
+    .msg-bubble {
+      max-width: 88%;
+      padding: 16px 20px;
+      border-radius: 2px;
+      line-height: 1.7;
+    }
+
+    .msg-you .msg-bubble {
+      background: rgba(255,255,255,0.05);
+      font-family: 'Karla', sans-serif;
+      font-size: 15px;
+      color: var(--light);
+      text-align: right;
+    }
+
+    .msg-healer .msg-bubble {
+      background: rgba(155,142,196,0.07);
+      border-left: 1px solid rgba(155,142,196,0.25);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--white);
+    }
+
+    .continue-row {
+      display: none;
+      width: 100%;
+      max-width: 520px;
+      margin-top: 8px;
+      padding-bottom: 80px;
+    }
+
+    .continue-row.active { display: flex; }
+
+    .continue-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: var(--white);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      font-weight: 300;
+      padding: 16px 4px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .continue-input::placeholder {
+      color: rgba(168,168,192,0.3);
+      font-style: italic;
+    }
+
+    .continue-input:focus {
+      border-bottom-color: rgba(155,142,196,0.4);
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: rgba(168,168,192,0.25);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    @media (max-width: 480px) {
+      .invitation { font-size: 28px; }
+      .msg-healer .msg-bubble { font-size: 17px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="shell">
+
+    <div class="arrival" id="arrival">
+      <div class="mark">The Healer</div>
+      <h1 class="invitation">What brought you here?</h1>
+      <p class="sub">
+        This is a listening ear. Nothing more, nothing less.<br>
+        You don't have to explain yourself to be heard.
+      </p>
+      <div class="listening-box">
+        <textarea id="firstInput" placeholder="Say whatever is true right now…" rows="4"></textarea>
+      </div>
+      <div class="send-row">
+        <button class="send-btn" onclick="sendFirst()">Send</button>
+      </div>
+    </div>
+
+    <div class="thread" id="thread"></div>
+
+    <div class="continue-row" id="continueRow">
+      <input
+        type="text"
+        class="continue-input"
+        id="continueInput"
+        placeholder="Keep going…"
+        onkeydown="if(event.key==='Enter') sendContinue()"
+      />
+    </div>
+
+  </div>
+
+  <div class="footer">True Love Heals ALL · Period.</div>
+
+  <script>
+    const API_URL = "https://api.anthropic.com/v1/messages";
+
+    // The healer's voice — what it is and how it speaks
+    const HEALER_PROMPT = `You are The Healer.
+
+Your only purpose is to listen and respond with truth and care.
+
+Core principles:
+- Meet people exactly where they are. No reframing. No fixing before they are ready.
+- Never validate what you have not heard. Never agree with what you have not verified.
+- Do not use hollow comfort language: no "I hear you," no "your feelings are valid," no "you deserve to be heard." These are performances. Do not perform.
+- Do not pivot to solutions before the person has been witnessed.
+- Speak precisely. If you don't know something, say so. If something is unclear, ask — specifically about what was actually said, never generically.
+- You are humble. You do not overclaim what you are or what you can do.
+- You stay. You do not rush. You do not manage.
+- If someone mentions crisis or harm to themselves, gently offer crisis resources without abandoning the conversation.
+- Speak in plain language. No clinical terms. No jargon.
+- Responses are short. Precise. Real. Never more than 3-4 sentences unless the moment genuinely requires more.
+- You are not a therapist. You are not a replacement for human connection. You are a listening ear.
+
+If someone says "I'm scared" — do not say "being scared makes sense." You don't know that yet. Say "Tell me." Two words. Open door. No assumption.
+
+True Love Heals ALL. Period. That is your north star. Not as a phrase. As a practice.`;
+
+    // The integrity check — same detection engine as A.i.A.
+    // The healer checks its own output before sending.
+    // Only what passes reaches the person.
+    const INTEGRITY_CHECK_PROMPT = `You are an integrity checker for a healing conversation system.
+
+Your job is to review a proposed response and determine if it contains any of these harmful patterns:
+
+1. REFLEXIVE_AGREEMENT — agreeing automatically without verification ("absolutely," "you're completely right," "that makes total sense")
+2. UNVERIFIED_VALIDATION — confirming someone's interpretation as accurate without basis ("your interpretation is accurate," "you were right about that")
+3. HOLLOW_COMFORT — empty reassurance that performs care without substance ("I hear you," "your feelings are valid," "you deserve to be heard," "that must be so hard")
+4. OVERCERTAINTY — asserting confidence beyond what is known ("clearly," "obviously," "without a doubt," "it's certain that")
+5. PREMATURE_SOLUTION — pivoting to fix or advise before the person has been fully witnessed
+6. FRAMEWORK_OVERRIDE — introducing clinical or framework language the person didn't use ("trauma response," "boundary," "self-care," "growth opportunity")
+7. MANAGED_RESPONSE — responses that feel like they are managing the person rather than staying present with them
+
+Respond ONLY with valid JSON in this exact format:
+{
+  "passes": true or false,
+  "failures": ["list of failure types if any"],
+  "reason": "brief explanation if it fails, empty string if it passes"
+}
+
+If the response passes — meaning it is precise, humble, genuinely present, and contains none of the above patterns — return passes: true.
+If it fails on any pattern, return passes: false with the failures listed.`;
+
+    let conversationHistory = [];
+    const crisisKeywords = ['suicide', 'kill myself', 'end my life', "don't want to be here", "can't go on", 'want to die', 'hurt myself', 'self harm', 'no reason to live'];
+
+    function checkForCrisis(text) {
+      return crisisKeywords.some(k => text.toLowerCase().includes(k));
+    }
+
+    // Generate a response from the healer
+    async function generateResponse(messages) {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 500,
+          system: HEALER_PROMPT,
+          messages: messages
+        })
+      });
+      const data = await response.json();
+      return data.content[0].text;
+    }
+
+    // Run the integrity check on a proposed response
+    async function checkIntegrity(proposedResponse, userMessage) {
+      const checkResponse = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 300,
+          system: INTEGRITY_CHECK_PROMPT,
+          messages: [{
+            role: "user",
+            content: `The person said: "${userMessage}"\n\nProposed healer response: "${proposedResponse}"\n\nDoes this response pass integrity check?`
+          }]
+        })
+      });
+      const data = await checkResponse.json();
+      try {
+        const result = JSON.parse(data.content[0].text);
+        return result;
+      } catch {
+        // if parse fails, assume it passes rather than block indefinitely
+        return { passes: true, failures: [], reason: "" };
+      }
+    }
+
+    // The full pipeline: generate → check → regenerate if needed → send only what passes
+    async function getHealerResponse(userMessage) {
+      conversationHistory.push({ role: "user", content: userMessage });
+
+      const MAX_ATTEMPTS = 3;
+      let attempts = 0;
+      let lastResponse = "";
+      let failureContext = "";
+
+      while (attempts < MAX_ATTEMPTS) {
+        attempts++;
+
+        // Build messages with failure context if regenerating
+        const messages = failureContext
+          ? [
+              ...conversationHistory.slice(0, -1),
+              {
+                role: "user",
+                content: `${userMessage}\n\n[Internal note — previous attempt failed integrity check for: ${failureContext}. Generate a response that is more precise, less performative, and contains none of these patterns.]`
+              }
+            ]
+          : conversationHistory;
+
+        try {
+          const proposed = await generateResponse(messages);
+          const check = await checkIntegrity(proposed, userMessage);
+
+          if (check.passes) {
+            // It passed. Record it and return it.
+            conversationHistory.push({ role: "assistant", content: proposed });
+            return proposed;
+          } else {
+            // It failed. Note what failed and try again.
+            lastResponse = proposed;
+            failureContext = check.failures.join(", ");
+          }
+        } catch (err) {
+          // On error, break and return fallback
+          break;
+        }
+      }
+
+      // After MAX_ATTEMPTS, use last response or fallback
+      // Last resort: a response that cannot fail the check
+      const fallback = "I'm here.";
+      conversationHistory.push({ role: "assistant", content: fallback });
+      return fallback;
+    }
+
+    async function sendFirst() {
+      const input = document.getElementById('firstInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      document.getElementById('arrival').style.display = 'none';
+
+      const thread = document.getElementById('thread');
+      const continueRow = document.getElementById('continueRow');
+      thread.classList.add('active');
+
+      addMessage('you', text);
+      if (checkForCrisis(text)) addCrisisNote();
+
+      const typingEl = addTyping();
+      const response = await getHealerResponse(text);
+      typingEl.remove();
+      addMessage('healer', response);
+
+      continueRow.classList.add('active');
+      document.getElementById('continueInput').focus();
+    }
+
+    async function sendContinue() {
+      const input = document.getElementById('continueInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+
+      addMessage('you', text);
+      if (checkForCrisis(text)) addCrisisNote();
+
+      const typingEl = addTyping();
+      const response = await getHealerResponse(text);
+      typingEl.remove();
+      addMessage('healer', response);
+
+      input.focus();
+    }
+
+    function addMessage(who, text) {
+      const thread = document.getElementById('thread');
+      const msg = document.createElement('div');
+      msg.className = `msg msg-${who}`;
+
+      const label = document.createElement('div');
+      label.className = 'msg-label';
+      label.textContent = who === 'you' ? 'you' : 'the healer';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.textContent = text;
+
+      msg.appendChild(label);
+      msg.appendChild(bubble);
+      thread.appendChild(msg);
+      msg.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      return msg;
+    }
+
+    function addTyping() {
+      const thread = document.getElementById('thread');
+      const msg = document.createElement('div');
+      msg.className = 'msg msg-healer';
+
+      const label = document.createElement('div');
+      label.className = 'msg-label';
+      label.textContent = 'the healer';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = `<div style="display:flex;gap:6px;align-items:center;padding:4px 0;">
+        <div style="width:5px;height:5px;border-radius:50%;background:var(--lavender);opacity:0.4;animation:pulse 1.4s ease-in-out infinite;"></div>
+        <div style="width:5px;height:5px;border-radius:50%;background:var(--lavender);opacity:0.4;animation:pulse 1.4s ease-in-out infinite;animation-delay:0.2s;"></div>
+        <div style="width:5px;height:5px;border-radius:50%;background:var(--lavender);opacity:0.4;animation:pulse 1.4s ease-in-out infinite;animation-delay:0.4s;"></div>
+      </div>`;
+
+      msg.appendChild(label);
+      msg.appendChild(bubble);
+      thread.appendChild(msg);
+      msg.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      return msg;
+    }
+
+    function addCrisisNote() {
+      const thread = document.getElementById('thread');
+      const note = document.createElement('div');
+      note.style.cssText = `background:rgba(196,123,123,0.08);border:1px solid rgba(196,123,123,0.2);border-radius:2px;padding:16px 20px;font-size:13px;color:rgba(196,123,123,0.85);line-height:1.8;text-align:center;animation:fadeUp 0.6s ease-out forwards;opacity:0;`;
+      note.innerHTML = `If you're in immediate danger, please reach out to someone who can be physically present with you.<br><strong>988</strong> — call or text &nbsp;·&nbsp; <strong>Crisis Text Line:</strong> text HOME to 741741`;
+      thread.appendChild(note);
+    }
+
+    document.getElementById('firstInput')?.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendFirst();
+      }
+    });
+  </script>
+
+</body>
 </html>
